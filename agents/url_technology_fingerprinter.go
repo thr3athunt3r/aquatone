@@ -105,7 +105,7 @@ func (a *URLTechnologyFingerprinter) loadFingerprints() {
 		os.Exit(1)
 	}
 	json.Unmarshal(fingerprints, &a.fingerprints)
-	for i, _ := range a.fingerprints {
+	for i := range a.fingerprints {
 		a.fingerprints[i].LoadPatterns()
 	}
 }
