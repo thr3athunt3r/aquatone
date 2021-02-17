@@ -3,7 +3,6 @@ package agents
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"regexp"
@@ -11,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/michenriksen/aquatone/core"
+	"github.com/firefart/aquatone/core"
 )
 
 type URLScreenshotter struct {
@@ -60,7 +59,7 @@ func (a *URLScreenshotter) OnSessionEnd() {
 }
 
 func (a *URLScreenshotter) createTempUserDir() {
-	dir, err := ioutil.TempDir("", "aquatone-chrome")
+	dir, err := os.MkdirTemp("", "aquatone-chrome")
 	if err != nil {
 		a.session.Out.Fatal("Unable to create temporary user directory for Chrome/Chromium browser\n")
 		os.Exit(1)

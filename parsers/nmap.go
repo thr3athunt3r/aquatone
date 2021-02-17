@@ -2,9 +2,8 @@ package parsers
 
 import (
 	"io"
-	"io/ioutil"
 
-	"github.com/michenriksen/aquatone/core"
+	"github.com/firefart/aquatone/core"
 
 	"github.com/lair-framework/go-nmap"
 )
@@ -17,7 +16,7 @@ func NewNmapParser() *NmapParser {
 
 func (p *NmapParser) Parse(r io.Reader) ([]string, error) {
 	var targets []string
-	bytes, err := ioutil.ReadAll(r)
+	bytes, err := io.ReadAll(r)
 	if err != nil {
 		return targets, err
 	}
@@ -28,9 +27,7 @@ func (p *NmapParser) Parse(r io.Reader) ([]string, error) {
 
 	for _, host := range scan.Hosts {
 		urls := p.hostToURLs(host)
-		for _, url := range urls {
-			targets = append(targets, url)
-		}
+		targets = append(targets, urls...)
 	}
 
 	return targets, nil

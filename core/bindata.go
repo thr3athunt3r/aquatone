@@ -11,7 +11,6 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -161,7 +160,7 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"static/report_template.html": staticReport_templateHtml,
+	"static/report_template.html":         staticReport_templateHtml,
 	"static/wappalyzer_fingerprints.json": staticWappalyzer_fingerprintsJson,
 }
 
@@ -204,10 +203,11 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
-	"static": &bintree{nil, map[string]*bintree{
-		"report_template.html": &bintree{staticReport_templateHtml, map[string]*bintree{}},
-		"wappalyzer_fingerprints.json": &bintree{staticWappalyzer_fingerprintsJson, map[string]*bintree{}},
+	"static": {nil, map[string]*bintree{
+		"report_template.html":         {staticReport_templateHtml, map[string]*bintree{}},
+		"wappalyzer_fingerprints.json": {staticWappalyzer_fingerprintsJson, map[string]*bintree{}},
 	}},
 }}
 
@@ -225,7 +225,7 @@ func RestoreAsset(dir, name string) error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(_filePath(dir, name), data, info.Mode())
+	err = os.WriteFile(_filePath(dir, name), data, info.Mode())
 	if err != nil {
 		return err
 	}
@@ -257,4 +257,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-

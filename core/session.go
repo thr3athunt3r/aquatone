@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/url"
 	"os"
 	"path"
@@ -233,7 +232,7 @@ func (s *Session) GetFilePath(p string) string {
 }
 
 func (s *Session) ReadFile(p string) ([]byte, error) {
-	content, err := ioutil.ReadFile(s.GetFilePath(p))
+	content, err := os.ReadFile(s.GetFilePath(p))
 	if err != nil {
 		return content, err
 	}
@@ -247,7 +246,7 @@ func (s *Session) ToJSON() string {
 
 func (s *Session) SaveToFile(filename string) error {
 	path := s.GetFilePath(filename)
-	err := ioutil.WriteFile(path, []byte(s.ToJSON()), 0644)
+	err := os.WriteFile(path, []byte(s.ToJSON()), 0644)
 	if err != nil {
 		return err
 	}
