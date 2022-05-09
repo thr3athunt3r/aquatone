@@ -127,7 +127,14 @@ func main() {
 		parser := parsers.NewNmapParser()
 		targets, err = parser.Parse(reader)
 		if err != nil {
-			sess.Out.Fatal("Unable to parse input as Nmap/Masscan XML: %s\n", err)
+			sess.Out.Fatal("Unable to parse input as Nmap/Masscan XML: %v\n", err)
+			os.Exit(1)
+		}
+	} else if *sess.Options.HostPort {
+		parser := parsers.NewHostPortParser()
+		targets, err = parser.Parse(reader)
+		if err != nil {
+			sess.Out.Fatal("Unable to parse input as Host/Port: %v\n", err)
 			os.Exit(1)
 		}
 	} else {

@@ -19,6 +19,7 @@ type Options struct {
 	HTTPTimeout       *int
 	ScreenshotTimeout *int
 	Nmap              *bool
+	HostPort          *bool
 	SaveBody          *bool
 	Silent            *bool
 	Debug             *bool
@@ -39,6 +40,7 @@ func ParseOptions() (Options, error) {
 		HTTPTimeout:       flag.Int("http-timeout", 3*1000, "Timeout in miliseconds for HTTP requests"),
 		ScreenshotTimeout: flag.Int("screenshot-timeout", 30*1000, "Timeout in miliseconds for screenshots"),
 		Nmap:              flag.Bool("nmap", false, "Parse input as Nmap/Masscan XML"),
+		HostPort:          flag.Bool("hostport", false, "Parse input as Host Port file. host:port1,port2,port3"),
 		SaveBody:          flag.Bool("save-body", true, "Save response bodies to files"),
 		Silent:            flag.Bool("silent", false, "Suppress all output except for errors"),
 		Debug:             flag.Bool("debug", false, "Print debugging information"),
