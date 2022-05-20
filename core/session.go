@@ -218,8 +218,8 @@ func (s *Session) BaseFilenameFromURL(stru string) string {
 	}
 
 	h := sha1.New()
-	io.WriteString(h, u.Path)
-	io.WriteString(h, u.Fragment)
+	io.WriteString(h, u.Path)     // nolint: errcheck
+	io.WriteString(h, u.Fragment) // nolint: errcheck
 
 	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16]
 	host := strings.Replace(u.Host, ":", "__", 1)

@@ -22,7 +22,9 @@ func (d *URLPublisher) ID() string {
 }
 
 func (a *URLPublisher) Register(s *core.Session) error {
-	s.EventBus.SubscribeAsync(core.TCPPort, a.OnTCPPort, false)
+	if err := s.EventBus.SubscribeAsync(core.TCPPort, a.OnTCPPort, false); err != nil {
+		return err
+	}
 	a.session = s
 	return nil
 }

@@ -21,7 +21,9 @@ func (d *TCPPortScanner) ID() string {
 }
 
 func (a *TCPPortScanner) Register(s *core.Session) error {
-	s.EventBus.SubscribeAsync(core.Host, a.OnHost, false)
+	if err := s.EventBus.SubscribeAsync(core.Host, a.OnHost, false); err != nil {
+		return err
+	}
 	a.session = s
 	return nil
 }

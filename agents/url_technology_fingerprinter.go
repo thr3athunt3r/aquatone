@@ -91,7 +91,9 @@ func (a *URLTechnologyFingerprinter) ID() string {
 }
 
 func (a *URLTechnologyFingerprinter) Register(s *core.Session) error {
-	s.EventBus.SubscribeAsync(core.URLResponsive, a.OnURLResponsive, false)
+	if err := s.EventBus.SubscribeAsync(core.URLResponsive, a.OnURLResponsive, false); err != nil {
+		return err
+	}
 	a.session = s
 	a.loadFingerprints()
 
@@ -101,10 +103,13 @@ func (a *URLTechnologyFingerprinter) Register(s *core.Session) error {
 func (a *URLTechnologyFingerprinter) loadFingerprints() {
 	fingerprints, err := a.session.Asset("static/wappalyzer_fingerprints.json")
 	if err != nil {
-		a.session.Out.Fatal("Can't read technology fingerprints file\n")
+		a.session.Out.Fatal("Can't read technology fingerprints file: %v\n", err)
 		os.Exit(1)
 	}
-	json.Unmarshal(fingerprints, &a.fingerprints)
+	if err := json.Unmarshal(fingerprints, &a.fingerprints); err != nil {
+		a.session.Out.Fatal("Can't unmarshal technology fingerprints file: %v\n", err)
+		os.Exit(1)
+	}
 	for i := range a.fingerprints {
 		a.fingerprints[i].LoadPatterns()
 	}

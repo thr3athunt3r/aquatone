@@ -23,7 +23,9 @@ func (d *URLRequester) ID() string {
 }
 
 func (a *URLRequester) Register(s *core.Session) error {
-	s.EventBus.SubscribeAsync(core.URL, a.OnURL, false)
+	if err := s.EventBus.SubscribeAsync(core.URL, a.OnURL, false); err != nil {
+		return err
+	}
 	a.session = s
 	return nil
 }

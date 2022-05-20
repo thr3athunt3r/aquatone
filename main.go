@@ -111,14 +111,38 @@ func main() {
 		os.Exit(0)
 	}
 
-	agents.NewTCPPortScanner().Register(sess)
-	agents.NewURLPublisher().Register(sess)
-	agents.NewURLRequester().Register(sess)
-	agents.NewURLHostnameResolver().Register(sess)
-	agents.NewURLPageTitleExtractor().Register(sess)
-	agents.NewURLScreenshotter().Register(sess)
-	agents.NewURLTechnologyFingerprinter().Register(sess)
-	agents.NewURLTakeoverDetector().Register(sess)
+	if err := agents.NewTCPPortScanner().Register(sess); err != nil {
+		sess.Out.Fatal("Error during register of NewTCPPortScanner: %s\n", err)
+		os.Exit(1)
+	}
+	if err := agents.NewURLPublisher().Register(sess); err != nil {
+		sess.Out.Fatal("Error during register of NewURLPublisher: %s\n", err)
+		os.Exit(1)
+	}
+	if err := agents.NewURLRequester().Register(sess); err != nil {
+		sess.Out.Fatal("Error during register of NewURLRequester: %s\n", err)
+		os.Exit(1)
+	}
+	if err := agents.NewURLHostnameResolver().Register(sess); err != nil {
+		sess.Out.Fatal("Error during register of NewURLHostnameResolver: %s\n", err)
+		os.Exit(1)
+	}
+	if err := agents.NewURLPageTitleExtractor().Register(sess); err != nil {
+		sess.Out.Fatal("Error during register of NewURLPageTitleExtractor: %s\n", err)
+		os.Exit(1)
+	}
+	if err := agents.NewURLScreenshotter().Register(sess); err != nil {
+		sess.Out.Fatal("Error during register of NewURLScreenshotter: %s\n", err)
+		os.Exit(1)
+	}
+	if err := agents.NewURLTechnologyFingerprinter().Register(sess); err != nil {
+		sess.Out.Fatal("Error during register of NewURLTechnologyFingerprinter: %s\n", err)
+		os.Exit(1)
+	}
+	if err := agents.NewURLTakeoverDetector().Register(sess); err != nil {
+		sess.Out.Fatal("Error during register of NewURLTakeoverDetector: %s\n", err)
+		os.Exit(1)
+	}
 
 	reader := bufio.NewReader(os.Stdin)
 	var targets []string
@@ -187,7 +211,9 @@ func main() {
 		}
 		structure, _ := core.GetPageStructure(body)
 		page.PageStructure = structure
-		f.WriteString(page.URL + "\n")
+		if _, err := f.WriteString(page.URL + "\n"); err != nil {
+			continue
+		}
 	}
 	f.Close()
 	sess.Out.Important(" done\n")

@@ -28,8 +28,12 @@ func (a *URLScreenshotter) ID() string {
 }
 
 func (a *URLScreenshotter) Register(s *core.Session) error {
-	s.EventBus.SubscribeAsync(core.URLResponsive, a.OnURLResponsive, false)
-	s.EventBus.SubscribeAsync(core.SessionEnd, a.OnSessionEnd, false)
+	if err := s.EventBus.SubscribeAsync(core.URLResponsive, a.OnURLResponsive, false); err != nil {
+		return err
+	}
+	if err := s.EventBus.SubscribeAsync(core.SessionEnd, a.OnSessionEnd, false); err != nil {
+		return err
+	}
 	a.session = s
 	a.createTempUserDir()
 	a.locateChrome()
@@ -181,6 +185,10 @@ func (a *URLScreenshotter) killChromeProcessIfRunning(cmd *exec.Cmd) {
 	if cmd.Process == nil {
 		return
 	}
-	cmd.Process.Release()
-	cmd.Process.Kill()
+	if err := cmd.Process.Release(); err != nil {
+		a.session.Out.Error("Error on release: %v\n", err)
+	}
+	if err := cmd.Process.Kill(); err != nil {
+		a.session.Out.Error("Error on kill: %v\n", err)
+	}
 }

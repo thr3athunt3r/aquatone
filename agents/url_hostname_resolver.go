@@ -20,7 +20,9 @@ func (a *URLHostnameResolver) ID() string {
 }
 
 func (a *URLHostnameResolver) Register(s *core.Session) error {
-	s.EventBus.SubscribeAsync(core.URLResponsive, a.OnURLResponsive, false)
+	if err := s.EventBus.SubscribeAsync(core.URLResponsive, a.OnURLResponsive, false); err != nil {
+		return err
+	}
 	a.session = s
 
 	return nil

@@ -83,6 +83,7 @@ type Tag struct {
 	Hash string `json:"hash"`
 }
 
+// nolint: gosimple
 func (t Tag) HasLink() bool {
 	if t.Link != "" {
 		return true
@@ -129,9 +130,9 @@ func (p *Page) AddTag(text string, tagType string, link string) {
 	defer p.Unlock()
 
 	h := sha1.New()
-	io.WriteString(h, text)
-	io.WriteString(h, tagType)
-	io.WriteString(h, link)
+	io.WriteString(h, text)    // nolint: errcheck
+	io.WriteString(h, tagType) // nolint: errcheck
+	io.WriteString(h, link)    // nolint: errcheck
 
 	p.Tags = append(p.Tags, Tag{
 		Text: text,
@@ -153,8 +154,8 @@ func (p *Page) AddNote(text string, noteType string) {
 func (p *Page) BaseFilename() string {
 	u := p.ParsedURL()
 	h := sha1.New()
-	io.WriteString(h, u.Path)
-	io.WriteString(h, u.Fragment)
+	io.WriteString(h, u.Path)     // nolint: errcheck
+	io.WriteString(h, u.Fragment) // nolint: errcheck
 
 	pathHash := fmt.Sprintf("%x", h.Sum(nil))[0:16]
 	host := strings.Replace(u.Host, ":", "__", 1)
