@@ -18,7 +18,7 @@ type FingerprintRegexp struct {
 type Fingerprint struct {
 	Name               string            `json:"name"`
 	Categories         []string          `json:"categories"`
-	Implies            []string          `json:"implies"`
+	Implies            []Fingerprint     `json:"implies"`
 	Website            string            `json:"website"`
 	Headers            map[string]string `json:"headers"`
 	HTML               []string          `json:"html"`
@@ -135,12 +135,12 @@ func (a *URLTechnologyFingerprinter) OnURLResponsive(url string) {
 			seen[f.Name] = struct{}{}
 			page.AddTag(f.Name, "info", f.Website)
 			for _, impl := range f.Implies {
-				if _, ok := seen[impl]; ok {
+				if _, ok := seen[impl.Name]; ok {
 					continue
 				}
-				seen[impl] = struct{}{}
+				seen[impl.Name] = struct{}{}
 				for _, implf := range a.fingerprints {
-					if impl == implf.Name {
+					if impl.Name == implf.Name {
 						page.AddTag(implf.Name, "info", implf.Website)
 						break
 					}
