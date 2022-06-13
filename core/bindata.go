@@ -4,7 +4,7 @@
 // sources:
 // static/report_template.html
 // static/wappalyzer_fingerprints.json
-package main
+package core
 
 import (
 	"bytes"
