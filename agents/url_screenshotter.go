@@ -195,7 +195,7 @@ func (a *URLScreenshotter) killChromeProcessIfRunning(cmd *exec.Cmd) {
 	if err := cmd.Process.Release(); err != nil {
 		a.session.Out.Error("Error on release: %v\n", err)
 	}
-	if err := cmd.Process.Kill(); err != nil {
+    if err := cmd.Process.Kill(); err.Error() != "os: process already released" {
 		a.session.Out.Error("Error on kill: %v\n", err)
 	}
 }

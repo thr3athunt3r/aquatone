@@ -37,7 +37,7 @@ func (a *URLRequester) OnURL(url string) {
 		defer a.session.WaitGroup.Done()
 		http := Gorequest(a.session.Options)
 		resp, _, errs := http.Get(url).
-			Set("User-Agent", RandomUserAgent()).
+        Set("User-Agent", RandomUserAgent()).End()
 // Customizing HTTP headers can get blocked by some security mechanism
 //			Set("X-Forwarded-For", RandomIPv4Address()).
 //			Set("Via", fmt.Sprintf("1.1 %s", RandomIPv4Address())).
