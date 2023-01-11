@@ -38,9 +38,10 @@ func (a *URLRequester) OnURL(url string) {
 		http := Gorequest(a.session.Options)
 		resp, _, errs := http.Get(url).
 			Set("User-Agent", RandomUserAgent()).
-			Set("X-Forwarded-For", RandomIPv4Address()).
-			Set("Via", fmt.Sprintf("1.1 %s", RandomIPv4Address())).
-			Set("Forwarded", fmt.Sprintf("for=%s;proto=http;by=%s", RandomIPv4Address(), RandomIPv4Address())).End()
+// Customizing HTTP headers can get blocked by some security mechanism
+//			Set("X-Forwarded-For", RandomIPv4Address()).
+//			Set("Via", fmt.Sprintf("1.1 %s", RandomIPv4Address())).
+//			Set("Forwarded", fmt.Sprintf("for=%s;proto=http;by=%s", RandomIPv4Address(), RandomIPv4Address())).End()
 		var status string
 		if errs != nil {
 			a.session.Stats.IncrementRequestFailed()
